@@ -1,5 +1,8 @@
 from pyrogram import Client
 from config import API_ID, API_HASH, BOT_TOKEN
+from app import run
+
+loop = run()
 
 class Bot(Client):
 
