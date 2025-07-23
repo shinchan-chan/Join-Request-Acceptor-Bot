@@ -86,10 +86,10 @@ async def approve_new(client, m):
         await client.approve_chat_join_request(m.chat.id, m.from_user.id)
         try:
             buttons = [
-                [InlineKeyboardButton("Join Updates", url="https://t.me/your_update_channel")],
+                [InlineKeyboardButton("Join Updates", url="https://t.me/Hanime_Web")],
                 [
-                    InlineKeyboardButton("Help", url="https://t.me/your_help_channel"),
-                    InlineKeyboardButton("Support", url="https://t.me/your_support_channel")
+                    InlineKeyboardButton("Help", url="https://t.me/Amex_Fushiguro"),
+                    InlineKeyboardButton("Support", url="https://t.me/Hanime_Web")
                 ]
             ]
             markup = InlineKeyboardMarkup(buttons)
