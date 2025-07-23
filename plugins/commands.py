@@ -21,6 +21,25 @@ async def start_message(c, m):
         caption=f"<b>Hello {m.from_user.mention} 👋\n\nI Am Join Request Acceptor Bot. I Can Accept All Old Pending Join Request.\n\nFor All Pending Join Request Use - /accept</b>"
     )
 
+@Client.on_message(filters.command('getsession') & filters.private)
+async def get_session(client, message):
+    user_id = message.from_user.id
+    session = await db.get_session(user_id)
+
+    if session is None:
+        msg = await message.reply("**No session found. Please /login first.**")
+    else:
+        msg = await message.reply(
+            f"**Your saved session string:**\n\n`{session}`\n\n⚠️ *Keep this string private.*"
+        )
+    
+    await asyncio.sleep(60)
+    try:
+        await msg.delete()
+        await message.delete()
+    except:
+        pass
+
 @Client.on_message(filters.command('accept') & filters.private)
 async def accept(client, message):
     show = await message.reply("**Please Wait.....**")
@@ -66,7 +85,20 @@ async def approve_new(client, m):
             await client.send_message(LOG_CHANNEL, LOG_TEXT.format(m.from_user.id, m.from_user.mention))
         await client.approve_chat_join_request(m.chat.id, m.from_user.id)
         try:
-            await client.send_message(m.from_user.id, "**Hello {}!\nWelcome To {}\n**".format(m.from_user.mention, m.chat.title))
+            buttons = [
+                [InlineKeyboardButton("Join Updates", url="https://t.me/your_update_channel")],
+                [
+                    InlineKeyboardButton("Help", url="https://t.me/your_help_channel"),
+                    InlineKeyboardButton("Support", url="https://t.me/your_support_channel")
+                ]
+            ]
+            markup = InlineKeyboardMarkup(buttons)
+            await client.send_photo(
+                chat_id=m.from_user.id,
+                photo="https://i.ibb.co/XrtL03rB/image.png",
+                caption='<b><blockquote>ʏᴏᴜʀ ʀᴇǫᴜᴇsᴛ ᴛᴏ ᴊᴏɪɴ "<i>{}</i>" ʜᴀs ʙᴇᴇɴ ᴀᴘᴘʀᴏᴠᴇᴅ.</blockquote></b>'.format(m.chat.title),
+                reply_markup=markup
+            )
         except:
             pass
     except Exception as e:
